@@ -17,14 +17,14 @@ class WebParser
     counter = 0
     links_all.each do |link|
       img_link = link.search('img[@class="replace-2x img-responsive"]/@src').text
-      @result[link['href']] = { img: img_link }
+      @result[link['href']] = { "img" => img_link }
     end
     href_arr = @result.keys.shuffle
     puts "#{href_arr.size}: total links"
     href_arr.each do |link|
       counter += 1
       puts "#{counter}: processing"
-      sleep(rand(10))
+      sleep(rand(5))
       fetch_link = @agent.get link
       full_name = []
       basis_name = fetch_link.search('//div[@class="product-name"]').search('.nombre_producto').text
@@ -37,13 +37,13 @@ class WebParser
         st = price.text.delete("\n").delete("\t").strip
         nm = full_name[i]
         arr_tmp << [nm, st]
-        @result[link].merge!(atr: arr_tmp)
+        @result[link].merge!("atr" => arr_tmp)
       end
       next unless full_name.empty?
       nm =  basis_name.to_s
       st =  fetch_link.search('//span[@id="our_price_display"]').text
       arr_tmp << [nm, st]
-      @result[link].merge!(atr: arr_tmp)
+      @result[link].merge!("atr" => arr_tmp)
       #       require 'pry'; binding.pry
     end
     @result

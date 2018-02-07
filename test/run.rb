@@ -13,9 +13,10 @@ result = parse_web.parser_petsonic(params[:url])
 csv_name = params[:file]
 # result =  JSON.parse(File.read('temp.json'))
 arr_end = []
-result.values.each do |val|
-  part3 = val['img']
-  val['atr'].each do |atr|
+#      require 'pry'; binding.pry
+result.each_value do |val|
+  part3 = val["img"]
+  val["atr"].each do |atr|
     part1 = atr.first
     part2 = atr.last
     arr_end << [part1, part2, part3]
@@ -25,5 +26,4 @@ csv = CSV.generate do |c|
   arr_end.each { |e| c << e }
 end
 File.open("#{csv_name}.csv", 'w') { |f| f << csv }
-#      require 'pry'; binding.pry
 p 'end'
